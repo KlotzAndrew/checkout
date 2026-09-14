@@ -41899,6 +41899,11 @@ async function getSource(settings) {
             await git.submoduleUpdate(settings.fetchDepth, settings.nestedSubmodules);
             await git.submoduleForeach('git config --local gc.auto 0', settings.nestedSubmodules);
             endGroup();
+            if (settings.lfs) {
+                startGroup('Checking out submodule LFS objects');
+                await git.submoduleForeach('git lfs checkout', settings.nestedSubmodules);
+                endGroup();
+            }
             // Persist credentials
             if (settings.persistCredentials) {
                 startGroup('Persisting credentials for submodules');

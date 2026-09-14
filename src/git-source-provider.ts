@@ -294,6 +294,15 @@ export async function getSource(settings: IGitSourceSettings): Promise<void> {
       )
       core.endGroup()
 
+      if (settings.lfs) {
+        core.startGroup('Checking out submodule LFS objects')
+        await git.submoduleForeach(
+          'git lfs checkout',
+          settings.nestedSubmodules
+        )
+        core.endGroup()
+      }
+
       // Persist credentials
       if (settings.persistCredentials) {
         core.startGroup('Persisting credentials for submodules')
